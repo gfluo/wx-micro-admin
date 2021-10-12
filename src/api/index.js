@@ -31,3 +31,19 @@ export const getOrders = query => {
         params: query
     })
 }
+
+export const getActivities = query => {
+    return request({
+        url: '/admin/activities',
+        method: "get",
+        params: query
+    })
+}
+
+export const activityCreate = data => {
+    return request({
+        url: '/admin/activity',
+        method: "post",
+        data: data
+    })
+}

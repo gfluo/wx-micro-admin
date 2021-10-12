@@ -119,7 +119,7 @@
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { getUsers } from "../api/index";
+import { getActivities } from "../api/index";
 import { useRouter } from "vue-router";
 
 export default {
@@ -136,12 +136,11 @@ export default {
     const pageTotal = ref(0);
     // 获取表格数据
     const getData = () => {
-      getUsers({
+      getActivities({
         limit: query.pageSize,
         offset: query.pageSize * (query.pageIndex - 1),
-        openId: query.openId,
       }).then((resp) => {
-        tableData.value = resp.data.userList;
+        tableData.value = resp.data.activityList;
         pageTotal.value = resp.data.total;
       });
 

@@ -17,6 +17,9 @@
           <el-form-item label="活动地址" prop="address">
             <el-input size="mini" v-model="form.address"></el-input>
           </el-form-item>
+          <el-form-item label="活动封面" prop="cover">
+            <el-input size="mini" v-model="form.cover" placeholder="请输入封面图片网络地址"></el-input>
+          </el-form-item>
           <el-form-item label="费用(元)" prop="amount">
             <el-input-number size="mini" v-model="form.amount" :min="1" />
           </el-form-item>
@@ -139,6 +142,7 @@
 import { reactive, ref, onMounted, onBeforeUnmount } from "vue";
 import { ElMessage } from "element-plus";
 import WangEditor from "wangEditor";
+import { activityCreate } from "../api/index";
 export default {
   name: "productAdd",
   setup() {
@@ -162,7 +166,8 @@ export default {
       endDateTime: "",
       amount: 0,
       describe: "",
-      link: ["自我介绍"],
+      cover: "",
+      link: [],
     });
     let instance;
     onMounted(() => {
@@ -178,7 +183,6 @@ export default {
     const onSubmit = () => {
       // 表单校验
       form.describe = instance.txt.html();
-      console.log(form.describe);
       formRef.value.validate((valid) => {
         if (valid) {
           console.log(form);

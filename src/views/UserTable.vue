@@ -140,7 +140,7 @@ export default {
       getUsers({
         limit: query.pageSize,
         offset: query.pageSize * (query.pageIndex - 1),
-        openId: query.openId,
+        openId: !!query.openId ? query.openId : "",
       }).then((resp) => {
         tableData.value = resp.data.userList;
         pageTotal.value = resp.data.total;
