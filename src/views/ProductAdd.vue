@@ -57,14 +57,14 @@
               <el-form-item prop="beginDate">
                 <el-date-picker
                   size="mini"
-                  type="date"
+                  type="datetime"
                   placeholder="选择日期"
                   v-model="form.beginDate"
                   style="width: 100%"
                 ></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col class="line" :span="2">-</el-col>
+            <!--el-col class="line" :span="2">-</el-col>
             <el-col :span="11">
               <el-form-item prop="beginDateTime">
                 <el-time-picker
@@ -75,21 +75,21 @@
                 >
                 </el-time-picker>
               </el-form-item>
-            </el-col>
+            </el-col-->
           </el-form-item>
           <el-form-item label="结束时间">
             <el-col :span="11">
               <el-form-item prop="endDate">
                 <el-date-picker
                   size="mini"
-                  type="date"
+                  type="datetime"
                   placeholder="选择日期"
                   v-model="form.endDate"
                   style="width: 100%"
                 ></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col class="line" :span="2">-</el-col>
+            <!--el-col class="line" :span="2">-</el-col>
             <el-col :span="11">
               <el-form-item prop="endDateTime">
                 <el-time-picker
@@ -100,7 +100,7 @@
                 >
                 </el-time-picker>
               </el-form-item>
-            </el-col>
+            </el-col-->
           </el-form-item>
           <!--el-form-item label="城市级联" prop="options">
                         <el-cascader :options="options" v-model="form.options"></el-cascader>
@@ -161,9 +161,7 @@ export default {
       address: "",
       region: "",
       beginDate: "",
-      beginDateTime: "",
       endDate: "",
-      endDateTime: "",
       amount: 0,
       describe: "",
       cover: "",
@@ -185,7 +183,18 @@ export default {
       form.describe = instance.txt.html();
       formRef.value.validate((valid) => {
         if (valid) {
-          console.log(form);
+          activityCreate({
+            title: form.title,
+            address: form.address,
+            startTime: `${form.beginDate}`,
+            endTime: `${form.endDate}`,
+            describe: form.describe,
+            link: form.link,
+            amount: form.amount,
+            cover: form.cover,
+          }).then((resp) => {
+            console.log(resp)
+          })
           ElMessage.success("提交成功！");
         } else {
           return false;
