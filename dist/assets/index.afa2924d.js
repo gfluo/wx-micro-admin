@@ -1,0 +1,1 @@
+import{s as a}from"./request.5429afbb.js";const s=s=>a({url:"/admin/signIn",method:"post",data:s}),t=s=>a({url:"/admin/users",method:"get",params:s}),r=s=>a({url:"/admin/orders",method:"get",params:s}),e=s=>a({url:"/admin/activities",method:"get",params:s});export{r as a,e as b,t as g,s};
