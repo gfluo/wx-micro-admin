@@ -4,8 +4,8 @@ const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
     // easy-mock服务挂了，暂时不使用了
     //baseURL: 'http://localhost:4000',
-    //baseURL: 'https://www.szstswh.com',
-    baseURL: 'http://123.60.8.4:4000',
+    baseURL: 'https://www.szstswh.com',
+    //baseURL: 'http://123.60.8.4:4000',
     timeout: 5000
 });
 
