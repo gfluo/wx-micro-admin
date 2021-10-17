@@ -69,15 +69,19 @@
             <el-button
               type="text"
               icon="el-icon-edit"
-              disabled
               @click="handleEdit(scope.$index, scope.row)"
               >编辑
             </el-button>
             <el-button
               type="text"
+              icon="el-icon-edit"
+              @click="handleCopy(scope.$index, scope.row)"
+              >复制
+            </el-button>
+            <el-button
+              type="text"
               icon="el-icon-delete"
               class="red"
-              disabled
               @click="handleDelete(scope.$index, scope.row)"
               >删除</el-button
             >
@@ -119,7 +123,7 @@
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { getActivities } from "../api/index";
+import { getActivities, activityDel } from "../api/index";
 import { useRouter } from "vue-router";
 
 export default {
@@ -155,7 +159,7 @@ export default {
 
     // 查询操作
     const handleAdd = () => {
-      router.push('/productAdd');
+      router.push("/productAdd");
     };
     // 分页导航
     const handlePageChange = (val) => {
@@ -164,14 +168,22 @@ export default {
     };
 
     // 删除操作
-    const handleDelete = (index) => {
+    const handleDelete = (index, row) => {
       // 二次确认删除
       ElMessageBox.confirm("确定要删除吗？", "提示", {
         type: "warning",
       })
         .then(() => {
-          ElMessage.success("删除成功");
-          tableData.value.splice(index, 1);
+          activityDel({
+            activityId: row.id,
+          }).then((resp) => {
+            if (resp.errno == 0) {
+              ElMessage.success("删除成功");
+              tableData.value.splice(index, 1);
+            } else {
+              ElMessage.success("删除失败");
+            }
+          });
         })
         .catch(() => {});
     };

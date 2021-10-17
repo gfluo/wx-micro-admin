@@ -47,3 +47,11 @@ export const activityCreate = data => {
         data: data
     })
 }
+
+export const activityDel = data => {
+    return request({
+        url: '/admin/activity/del',
+        method: "post",
+        data: data
+    })
+}
