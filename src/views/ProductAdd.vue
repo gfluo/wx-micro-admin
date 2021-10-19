@@ -182,8 +182,8 @@ export default {
         }).then((resp) => {
           form.title = resp.data.title;
           form.address = resp.data.address;
-          form.beginDate = resp.data.startTime;
-          form.endDate = resp.data.endTime;
+          form.beginDate = resp.data.startTime + "";
+          form.endDate = resp.data.endTime + "";
           form.amount = resp.data.amount / 100;
           form.cover = resp.data.cover;
           form.link = resp.data.link.split(",");
@@ -205,8 +205,8 @@ export default {
           activityCreate({
             title: form.title,
             address: form.address,
-            startTime: `${form.beginDate}`,
-            endTime: `${form.endDate}`,
+            startTime: form.beginDate,
+            endTime: form.endDate,
             describe: form.describe,
             link: form.link,
             amount: form.amount,

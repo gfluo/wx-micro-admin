@@ -32,7 +32,7 @@
         <el-table-column prop="id" label="活动id" align="center"></el-table-column>
         <el-table-column prop="title" label="活动标题"></el-table-column>
         <el-table-column prop="amount" label="活动金额"></el-table-column>
-        <el-table-column prop="describe" label="活动描述"></el-table-column>
+        <el-table-column show-overflow-tooltip prop="describe" label="活动描述" ></el-table-column>
         <el-table-column prop="link" label="活动环节"></el-table-column>
         <!--el-table-column label="账户余额">
           <template #default="scope">￥{{ scope.row.money }}</template>
