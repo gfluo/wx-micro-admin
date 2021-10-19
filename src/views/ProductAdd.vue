@@ -142,10 +142,12 @@
 import { reactive, ref, onMounted, onBeforeUnmount } from "vue";
 import { ElMessage } from "element-plus";
 import WangEditor from "wangEditor";
-import { activityCreate } from "../api/index";
+import { activityCreate, activityDetail } from "../api/index";
+import { useRoute } from 'vue-router';
 export default {
   name: "productAdd",
   setup() {
+    const Route = useRoute();
     const rules = {
       title: [{ required: true, message: "请输入活动名称", trigger: "blur" }],
       address: [{ required: true, message: "请输入活动地址", trigger: "blur" }],
@@ -169,9 +171,26 @@ export default {
     });
     let instance;
     onMounted(() => {
+      console.log("获取到的参数：", Route.query.activityId);
+      
       instance = new WangEditor(editor.value);
       instance.config.zIndex = 1;
       instance.create();
+      if (Route.query.activityId != undefined) {  //编辑
+        activityDetail({
+          id: Route.query.activityId
+        }).then((resp) => {
+          form.title = resp.data.title;
+          form.address = resp.data.address;
+          form.beginDate = resp.data.startTime;
+          form.endDate = resp.data.endTime;
+          form.amount = resp.data.amount / 100;
+          form.cover = resp.data.cover;
+          form.link = resp.data.link.split(",");
+          instance.txt.html(resp.data.describe);
+        })
+      }
+
     });
     onBeforeUnmount(() => {
       instance.destroy();

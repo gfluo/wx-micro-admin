@@ -55,3 +55,11 @@ export const activityDel = data => {
         data: data
     })
 }
+
+export const activityDetail = data => {
+    return request({
+        url: '/admin/activity/detail',
+        method: "post",
+        data: data
+    })
+}

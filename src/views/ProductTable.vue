@@ -197,11 +197,19 @@ export default {
     });
     let idx = -1;
     const handleEdit = (index, row) => {
+      router.push({
+        path: '/productAdd',
+        query: {
+          activityId: row.id,
+        }
+      });
+      /*
       idx = index;
       Object.keys(form).forEach((item) => {
         form[item] = row[item];
       });
       editVisible.value = true;
+      */
     };
     const saveEdit = () => {
       editVisible.value = false;
