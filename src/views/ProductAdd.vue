@@ -18,7 +18,11 @@
             <el-input size="mini" v-model="form.address"></el-input>
           </el-form-item>
           <el-form-item label="活动封面" prop="cover">
-            <el-input size="mini" v-model="form.cover" placeholder="请输入封面图片网络地址"></el-input>
+            <el-input
+              size="mini"
+              v-model="form.cover"
+              placeholder="请输入封面图片网络地址"
+            ></el-input>
           </el-form-item>
           <el-form-item label="费用(元)" prop="amount">
             <el-input-number size="mini" v-model="form.amount" :min="1" />
@@ -59,6 +63,7 @@
                   size="mini"
                   type="datetime"
                   placeholder="选择日期"
+                  value-format="YYYY-MM-DD HH:mm:ss"
                   v-model="form.beginDate"
                   style="width: 100%"
                 ></el-date-picker>
@@ -84,6 +89,7 @@
                   size="mini"
                   type="datetime"
                   placeholder="选择日期"
+                  value-format="YYYY-MM-DD HH:mm:ss"
                   v-model="form.endDate"
                   style="width: 100%"
                 ></el-date-picker>
@@ -142,8 +148,8 @@
 import { reactive, ref, onMounted, onBeforeUnmount } from "vue";
 import { ElMessage } from "element-plus";
 import WangEditor from "wangEditor";
-import { activityCreate, activityDetail } from "../api/index";
-import { useRoute } from 'vue-router';
+import { activityCreate, activityDetail, activityUpdate } from "../api/index";
+import { useRoute } from "vue-router";
 export default {
   name: "productAdd",
   setup() {
@@ -154,6 +160,7 @@ export default {
       beginDate: [{ required: true, message: "请输入开始时间", trigger: "blur" }],
       endDate: [{ required: true, message: "请输入结束时间", trigger: "blur" }],
     };
+    let update = false;
     const editor = ref(null);
     const formRef = ref(null);
     const addVaule = ref("");
@@ -172,13 +179,15 @@ export default {
     let instance;
     onMounted(() => {
       console.log("获取到的参数：", Route.query.activityId);
-      
+
       instance = new WangEditor(editor.value);
       instance.config.zIndex = 1;
       instance.create();
-      if (Route.query.activityId != undefined) {  //编辑
+      if (Route.query.activityId != undefined) {
+        //编辑
+        update = true;
         activityDetail({
-          id: Route.query.activityId
+          id: Route.query.activityId,
         }).then((resp) => {
           form.title = resp.data.title;
           form.address = resp.data.address;
@@ -188,9 +197,8 @@ export default {
           form.cover = resp.data.cover;
           form.link = resp.data.link.split(",");
           instance.txt.html(resp.data.describe);
-        })
+        });
       }
-
     });
     onBeforeUnmount(() => {
       instance.destroy();
@@ -202,19 +210,36 @@ export default {
       form.describe = instance.txt.html();
       formRef.value.validate((valid) => {
         if (valid) {
-          activityCreate({
-            title: form.title,
-            address: form.address,
-            startTime: form.beginDate,
-            endTime: form.endDate,
-            describe: form.describe,
-            link: form.link,
-            amount: form.amount,
-            cover: form.cover,
-          }).then((resp) => {
-            console.log(resp)
-          })
-          ElMessage.success("提交成功！");
+          if (!update) {
+            activityCreate({
+              title: form.title,
+              address: form.address,
+              startTime: form.beginDate,
+              endTime: form.endDate,
+              describe: form.describe,
+              link: form.link,
+              amount: form.amount,
+              cover: form.cover,
+            }).then((resp) => {
+              console.log(resp);
+            });
+            ElMessage.success("提交成功！");
+          } else {
+            activityUpdate({
+              title: form.title,
+              address: form.address,
+              startTime: form.beginDate,
+              endTime: form.endDate,
+              describe: form.describe,
+              link: form.link,
+              amount: form.amount,
+              cover: form.cover,
+              id: Route.query.activityId,
+            }).then((resp) => {
+              console.log(resp);
+            });
+            ElMessage.success("提交成功！");
+          }
         } else {
           return false;
         }
@@ -222,20 +247,20 @@ export default {
     };
     //新增活动环节
     const showAddLink = () => {
-        addVisible.value = true
-    }
+      addVisible.value = true;
+    };
 
     //确定活动环节新增
     const addLinkConfirm = () => {
-        form.link.push(addVaule.value);
-        addVaule.value = "";
-        addVisible.value = false;
-    }
+      form.link.push(addVaule.value);
+      addVaule.value = "";
+      addVisible.value = false;
+    };
 
     //删除活动环节
     const addLinkColse = (tag) => {
-        form.link.splice(form.link.indexOf(tag), 1)
-    }
+      form.link.splice(form.link.indexOf(tag), 1);
+    };
 
     // 重置
     const onReset = () => {

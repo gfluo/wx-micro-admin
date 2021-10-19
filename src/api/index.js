@@ -48,6 +48,14 @@ export const activityCreate = data => {
     })
 }
 
+export const activityUpdate = data => {
+    return request({
+        url: '/admin/activity/update',
+        method: "post",
+        data: data
+    })
+}
+
 export const activityDel = data => {
     return request({
         url: '/admin/activity/del',
