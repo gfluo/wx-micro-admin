@@ -80,6 +80,12 @@
             </el-button>
             <el-button
               type="text"
+              icon="el-icon-edit"
+              @click="handleQrcode(scope.$index, scope.row)"
+              >二维码
+            </el-button>
+            <el-button
+              type="text"
               icon="el-icon-delete"
               class="red"
               @click="handleDelete(scope.$index, scope.row)"
@@ -102,14 +108,9 @@
 
     <!-- 编辑弹出框 -->
     <el-dialog title="编辑" v-model="editVisible" width="30%">
-      <el-form label-width="70px">
-        <el-form-item label="用户名">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="地址">
-          <el-input v-model="form.address"></el-input>
-        </el-form-item>
-      </el-form>
+      <el-image :src="qrcode"> 
+
+      </el-image>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="editVisible = false">取 消</el-button>
@@ -138,6 +139,7 @@ export default {
     });
     const tableData = ref([]);
     const pageTotal = ref(0);
+    const qrcode = ref("");
     // 获取表格数据
     const getData = () => {
       getActivities({
@@ -189,6 +191,11 @@ export default {
         .catch(() => {});
     };
 
+    const handleQrcode = (index, row) => {
+      editVisible.value = true;
+      qrcode.value = row.qrcode;
+    }
+
     // 表格编辑时弹窗和保存
     const editVisible = ref(false);
     let form = reactive({
@@ -225,10 +232,12 @@ export default {
       pageTotal,
       editVisible,
       form,
+      qrcode,
       handleAdd,
       handlePageChange,
       handleDelete,
       handleEdit,
+      handleQrcode,
       saveEdit,
     };
   },
