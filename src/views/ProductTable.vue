@@ -182,11 +182,15 @@ export default {
         activityId: generateId.value,
       }).then((resp) => {
         if (resp.errno == 0) {
-          ElMessage.success("生成成功");
           qrcode.value = resp.data.qrcode;
+          ElMessage.success("生成成功");
           tipShow.value = false;
         }
       })
+    }
+
+    const downloadQrcode = () => {
+      window.location.href = `${qrcode.value}`;
     }
 
     // 删除操作
@@ -265,6 +269,7 @@ export default {
       tipShow,
       generateId,
       generateQrcode,
+      downloadQrcode,
       handleAdd,
       handlePageChange,
       handleDelete,
