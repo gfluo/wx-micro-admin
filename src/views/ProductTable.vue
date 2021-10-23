@@ -32,7 +32,11 @@
         <el-table-column prop="id" label="活动id" align="center"></el-table-column>
         <el-table-column prop="title" label="活动标题"></el-table-column>
         <el-table-column prop="amount" label="活动金额"></el-table-column>
-        <el-table-column show-overflow-tooltip prop="describe" label="活动描述" ></el-table-column>
+        <el-table-column
+          show-overflow-tooltip
+          prop="describe"
+          label="活动描述"
+        ></el-table-column>
         <el-table-column prop="link" label="活动环节"></el-table-column>
         <!--el-table-column label="账户余额">
           <template #default="scope">￥{{ scope.row.money }}</template>
@@ -78,9 +82,8 @@
               @click="handleCopy(scope.$index, scope.row)"
               >复制
             </el-button>
-            <el-button
-              type="text"
-              icon="el-icon-edit"
+            <el-button type="text" 
+              icon="el-icon-link"
               @click="handleQrcode(scope.$index, scope.row)"
               >二维码
             </el-button>
@@ -108,13 +111,13 @@
 
     <!-- 编辑弹出框 -->
     <el-dialog title="编辑" v-model="editVisible" width="30%">
-      <el-image :src="qrcode"> 
-
-      </el-image>
+      <el-empty v-show="!tipShow" :image="qrcode"></el-empty>
+      <el-empty v-show="tipShow" description="当前活动还未生成分享二维码"></el-empty>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="editVisible = false">取 消</el-button>
-          <el-button type="primary" @click="saveEdit">确 定</el-button>
+          <el-button type="primary" @click="downloadQrcode">生成</el-button>
+          <el-button type="primary" @click="downloadQrcode">下载</el-button>
         </span>
       </template>
     </el-dialog>
@@ -140,6 +143,9 @@ export default {
     const tableData = ref([]);
     const pageTotal = ref(0);
     const qrcode = ref("");
+    const qrcodeShow = ref(false);
+    const generate = ref(true);
+    const tipShow = ref(true);
     // 获取表格数据
     const getData = () => {
       getActivities({
@@ -169,7 +175,6 @@ export default {
       getData();
     };
 
-    
     // 删除操作
     const handleDelete = (index, row) => {
       // 二次确认删除
@@ -193,8 +198,17 @@ export default {
 
     const handleQrcode = (index, row) => {
       editVisible.value = true;
-      qrcode.value = row.qrcode;
-    }
+      if (row.qrcode) {
+        qrcode.value = row.qrcode;
+        qrcodeShow.value = true;
+        generate.value = false;
+        tipShow.value = false;
+      } else {
+        qrcodeShow.value = false;
+        generate.value = true;
+        tipShow.value = true;
+      }
+    };
 
     // 表格编辑时弹窗和保存
     const editVisible = ref(false);
@@ -205,10 +219,10 @@ export default {
     let idx = -1;
     const handleEdit = (index, row) => {
       router.push({
-        path: '/productAdd',
+        path: "/productAdd",
         query: {
           activityId: row.id,
-        }
+        },
       });
       /*
       idx = index;
@@ -231,8 +245,11 @@ export default {
       tableData,
       pageTotal,
       editVisible,
+      qrcodeShow,
+      generate,
       form,
       qrcode,
+      tipShow,
       handleAdd,
       handlePageChange,
       handleDelete,

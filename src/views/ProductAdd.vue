@@ -5,7 +5,7 @@
         <el-breadcrumb-item>
           <i class="el-icon-lx-calendar"></i> 活动
         </el-breadcrumb-item>
-        <el-breadcrumb-item>新增</el-breadcrumb-item>
+        <el-breadcrumb-item>编辑</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="container">
