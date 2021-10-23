@@ -71,3 +71,11 @@ export const activityDetail = data => {
         data: data
     })
 }
+
+export const activityGenerateQrcode = data => {
+    return request({
+        url: '/admin/qrcode/create',
+        method: "post",
+        data: data
+    })
+}

@@ -82,7 +82,8 @@
               @click="handleCopy(scope.$index, scope.row)"
               >复制
             </el-button>
-            <el-button type="text" 
+            <el-button
+              type="text"
               icon="el-icon-link"
               @click="handleQrcode(scope.$index, scope.row)"
               >二维码
@@ -111,12 +112,12 @@
 
     <!-- 编辑弹出框 -->
     <el-dialog title="编辑" v-model="editVisible" width="30%">
-      <el-empty v-show="!tipShow" :image="qrcode"></el-empty>
+      <el-empty v-show="!tipShow" description="扫码体验小程序" :image="qrcode"></el-empty>
       <el-empty v-show="tipShow" description="当前活动还未生成分享二维码"></el-empty>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="editVisible = false">取 消</el-button>
-          <el-button type="primary" @click="downloadQrcode">生成</el-button>
+          <el-button type="primary" @click="generateQrcode">生成</el-button>
           <el-button type="primary" @click="downloadQrcode">下载</el-button>
         </span>
       </template>
@@ -127,7 +128,7 @@
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { getActivities, activityDel } from "../api/index";
+import { getActivities, activityDel, activityGenerateQrcode } from "../api/index";
 import { useRouter } from "vue-router";
 
 export default {
@@ -144,7 +145,7 @@ export default {
     const pageTotal = ref(0);
     const qrcode = ref("");
     const qrcodeShow = ref(false);
-    const generate = ref(true);
+    const generateId= ref(0);
     const tipShow = ref(true);
     // 获取表格数据
     const getData = () => {
@@ -175,6 +176,19 @@ export default {
       getData();
     };
 
+    const generateQrcode = () => {
+      console.log(generateId.value);
+      activityGenerateQrcode({
+        activityId: generateId.value,
+      }).then((resp) => {
+        if (resp.errno == 0) {
+          ElMessage.success("生成成功");
+          qrcode.value = resp.data.qrcode;
+          tipShow.value = false;
+        }
+      })
+    }
+
     // 删除操作
     const handleDelete = (index, row) => {
       // 二次确认删除
@@ -197,15 +211,14 @@ export default {
     };
 
     const handleQrcode = (index, row) => {
+      generateId.value = row.id;
       editVisible.value = true;
       if (row.qrcode) {
         qrcode.value = row.qrcode;
         qrcodeShow.value = true;
-        generate.value = false;
         tipShow.value = false;
       } else {
         qrcodeShow.value = false;
-        generate.value = true;
         tipShow.value = true;
       }
     };
@@ -217,6 +230,7 @@ export default {
       address: "",
     });
     let idx = -1;
+
     const handleEdit = (index, row) => {
       router.push({
         path: "/productAdd",
@@ -246,10 +260,11 @@ export default {
       pageTotal,
       editVisible,
       qrcodeShow,
-      generate,
       form,
       qrcode,
       tipShow,
+      generateId,
+      generateQrcode,
       handleAdd,
       handlePageChange,
       handleDelete,
