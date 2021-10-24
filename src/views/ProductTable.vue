@@ -114,9 +114,9 @@
     <el-dialog title="编辑" v-model="editVisible" width="30%">
       <div v-show="!tipShow" id="poster" ref="poster" class="poster">
         <el-image :src="posterInfo.cover" crossOrigin="Anonymous"></el-image>
-        <h2>{{posterInfo.title}}</h2>
-        <h3>活动地点：{{posterInfo.address}}</h3>
-        <h3>活动时间：{{posterInfo.startTime}}</h3>
+        <h2>{{ posterInfo.title }}</h2>
+        <h3>活动地点：{{ posterInfo.address }}</h3>
+        <h3>活动时间：{{ posterInfo.startTime }}</h3>
         <el-empty description="扫码体验小程序" :image="posterInfo.qrcode"></el-empty>
       </div>
       <el-empty v-show="tipShow" description="当前活动还未生成分享二维码"></el-empty>
@@ -157,7 +157,7 @@ export default {
       cover: "",
       startTime: "",
       qrcode: "",
-    })
+    });
 
     const poster = ref("");
     const qrcode = ref("");
@@ -220,7 +220,10 @@ export default {
 
     const posterDownload = () => {
       let a = document.createElement("a");
-      html2canvas(poster.value).then((canvas) => {
+      html2canvas(poster.value, {
+        allowTaint: false,
+        useCORS: true,
+      }).then((canvas) => {
         let dom = document.body.appendChild(canvas);
         dom.style.display = "none";
         a.style.display = "none";
