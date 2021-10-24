@@ -86,7 +86,7 @@
               type="text"
               icon="el-icon-link"
               @click="handleQrcode(scope.$index, scope.row)"
-              >二维码
+              >海报
             </el-button>
             <el-button
               type="text"
@@ -112,13 +112,19 @@
 
     <!-- 编辑弹出框 -->
     <el-dialog title="编辑" v-model="editVisible" width="30%">
-      <el-empty v-show="!tipShow" description="扫码体验小程序" :image="qrcode"></el-empty>
+      <div v-show="!tipShow" id="poster" ref="poster" class="poster">
+        <el-image :src="posterInfo.cover" crossOrigin="Anonymous"></el-image>
+        <h2>{{posterInfo.title}}</h2>
+        <h3>活动地点：{{posterInfo.address}}</h3>
+        <h3>活动时间：{{posterInfo.startTime}}</h3>
+        <el-empty description="扫码体验小程序" :image="posterInfo.qrcode"></el-empty>
+      </div>
       <el-empty v-show="tipShow" description="当前活动还未生成分享二维码"></el-empty>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="editVisible = false">取 消</el-button>
           <el-button type="primary" @click="generateQrcode">生成</el-button>
-          <el-button type="primary" @click="downloadQrcode">下载</el-button>
+          <el-button type="primary" @click="posterDownload">下载</el-button>
         </span>
       </template>
     </el-dialog>
@@ -130,6 +136,7 @@ import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { getActivities, activityDel, activityGenerateQrcode } from "../api/index";
 import { useRouter } from "vue-router";
+import html2canvas from "html2canvas";
 
 export default {
   name: "userstable",
@@ -143,9 +150,19 @@ export default {
     });
     const tableData = ref([]);
     const pageTotal = ref(0);
+
+    const posterInfo = reactive({
+      address: "",
+      title: "",
+      cover: "",
+      startTime: "",
+      qrcode: "",
+    })
+
+    const poster = ref("");
     const qrcode = ref("");
     const qrcodeShow = ref(false);
-    const generateId= ref(0);
+    const generateId = ref(0);
     const tipShow = ref(true);
     // 获取表格数据
     const getData = () => {
@@ -186,12 +203,42 @@ export default {
           ElMessage.success("生成成功");
           tipShow.value = false;
         }
-      })
-    }
+      });
+    };
+
+    const dataURLToBlob = (dataurl) => {
+      let arr = dataurl.split(",");
+      let mime = arr[0].match(/:(.*?);/)[1];
+      let bstr = atob(arr[1]);
+      let n = bstr.length;
+      let u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    };
+
+    const posterDownload = () => {
+      let a = document.createElement("a");
+      html2canvas(poster.value).then((canvas) => {
+        let dom = document.body.appendChild(canvas);
+        dom.style.display = "none";
+        a.style.display = "none";
+        document.body.removeChild(dom);
+        let blob = dataURLToBlob(dom.toDataURL("image/png"));
+        a.setAttribute("href", URL.createObjectURL(blob));
+        //这块是保存图片操作  可以设置保存的图片的信息
+        a.setAttribute("download", "poster.png");
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(blob);
+        document.body.removeChild(a);
+      });
+    };
 
     const downloadQrcode = () => {
       window.location.href = `${qrcode.value}`;
-    }
+    };
 
     // 删除操作
     const handleDelete = (index, row) => {
@@ -217,8 +264,13 @@ export default {
     const handleQrcode = (index, row) => {
       generateId.value = row.id;
       editVisible.value = true;
+      posterInfo.cover = row.cover;
+      posterInfo.title = row.title;
+      posterInfo.address = row.address;
+      posterInfo.startTime = row.startTime;
       if (row.qrcode) {
         qrcode.value = row.qrcode;
+        posterInfo.qrcode = row.qrcode;
         qrcodeShow.value = true;
         tipShow.value = false;
       } else {
@@ -266,10 +318,13 @@ export default {
       qrcodeShow,
       form,
       qrcode,
+      poster,
       tipShow,
       generateId,
+      posterInfo,
       generateQrcode,
       downloadQrcode,
+      posterDownload,
       handleAdd,
       handlePageChange,
       handleDelete,
@@ -282,6 +337,17 @@ export default {
 </script>
 
 <style scoped>
+.poster h2 {
+  text-align: center;
+}
+.poster h3 {
+  text-align: center;
+}
+
+.poster el-iamge {
+  text-align: center;
+}
+
 .handle-box {
   margin-bottom: 20px;
 }
