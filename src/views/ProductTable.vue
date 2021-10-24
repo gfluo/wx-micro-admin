@@ -200,6 +200,7 @@ export default {
       }).then((resp) => {
         if (resp.errno == 0) {
           qrcode.value = resp.data.qrcode;
+          posterInfo.qrcode = resp.data.qrcode;
           ElMessage.success("生成成功");
           tipShow.value = false;
         }
