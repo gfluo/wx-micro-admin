@@ -36,6 +36,8 @@
         <el-table-column prop="occupation" label="职业"></el-table-column>
         <el-table-column prop="mobile" label="联系方式"></el-table-column>
         <el-table-column prop="interest" label="兴趣爱好"></el-table-column>
+        <el-table-column prop="intro" label="自我介绍"></el-table-column>
+
         <!--el-table-column label="账户余额">
           <template #default="scope">￥{{ scope.row.money }}</template>
         </el-table-column>
