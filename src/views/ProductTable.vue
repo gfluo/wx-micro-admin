@@ -67,7 +67,7 @@
           </template>
         </el-table-column-->
         <el-table-column prop="startTime" label="活动开始时间"></el-table-column>
-        <el-table-column prop="startTime" label="活动结束时间"></el-table-column>
+        <el-table-column prop="endTime" label="活动结束时间"></el-table-column>
         <el-table-column label="操作" width="180" align="center">
           <template #default="scope">
             <el-button
