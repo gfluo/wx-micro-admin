@@ -32,6 +32,7 @@
         <el-table-column prop="id" label="活动id" align="center"></el-table-column>
         <el-table-column prop="title" label="活动标题"></el-table-column>
         <el-table-column prop="amount" label="活动金额"></el-table-column>
+        <el-table-column prop="amountDescribe" label="收费描述"></el-table-column>
         <el-table-column
           show-overflow-tooltip
           prop="describe"

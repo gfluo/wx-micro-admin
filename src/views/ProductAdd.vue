@@ -27,6 +27,9 @@
           <el-form-item label="费用(元)" prop="amount">
             <el-input-number size="mini" v-model="form.amount" :min="1" />
           </el-form-item>
+          <el-form-item label="费用描述" prop="amountDescribe">
+            <el-input size="mini" v-model="form.amountDescribe"></el-input>
+          </el-form-item>
           <el-form-item label="活动环节" prop="link">
             <el-tag
               v-for="tag in form.link"
@@ -172,6 +175,7 @@ export default {
       beginDate: "",
       endDate: "",
       amount: 0,
+      amountDescribe: "",
       describe: "",
       cover: "",
       link: [],
@@ -196,6 +200,7 @@ export default {
           form.amount = resp.data.amount / 100;
           form.cover = resp.data.cover;
           form.link = resp.data.link.split(",");
+          form.amountDescribe = resp.data.amountDescribe;
           instance.txt.html(resp.data.describe);
         });
       }
@@ -220,6 +225,7 @@ export default {
               link: form.link,
               amount: form.amount,
               cover: form.cover,
+              amountDescribe: form.amountDescribe,
             }).then((resp) => {
               console.log(resp);
             });
@@ -235,6 +241,7 @@ export default {
               amount: form.amount,
               cover: form.cover,
               id: Route.query.activityId,
+              amountDescribe: form.amountDescribe,
             }).then((resp) => {
               console.log(resp);
             });
