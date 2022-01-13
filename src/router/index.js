@@ -46,6 +46,13 @@ const routes = [
                 },
                 component: () => import( /* webpackChunkName: "table" */ "../views/ProductAdd.vue")
             }, {
+                path: "/productEdit",
+                name: "productEdit",
+                meta: {
+                    title: '活动编辑'
+                },
+                component: () => import( /* webpackChunkName: "table" */ "../views/ProductEdit.vue")
+            }, {
                 path: "/charts",
                 name: "basecharts",
                 meta: {

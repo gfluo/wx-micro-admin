@@ -293,12 +293,8 @@ export default {
     let idx = -1;
 
     const handleEdit = (index, row) => {
-      router.push({
-        path: "/productAdd",
-        query: {
-          activityId: row.id,
-        },
-      });
+      localStorage.setItem('editActivityId', row.id)
+      router.push("/productEdit");
       /*
       idx = index;
       Object.keys(form).forEach((item) => {
