@@ -46,6 +46,13 @@ const routes = [
                 },
                 component: () => import( /* webpackChunkName: "table" */ "../views/ProductAdd.vue")
             }, {
+                path: "/productCopy",
+                name: "productCopy",
+                meta: {
+                    title: '活动复制'
+                },
+                component: () => import( /* webpackChunkName: "table" */ "../views/ProductCopy.vue")
+            }, {
                 path: "/productEdit",
                 name: "productEdit",
                 meta: {

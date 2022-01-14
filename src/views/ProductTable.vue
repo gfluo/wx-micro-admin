@@ -292,6 +292,10 @@ export default {
     });
     let idx = -1;
 
+    const handleCopy = (index, row) => {
+      localStorage.setItem('copyActivityId', row.id)
+      router.push("/productCopy");
+    }
     const handleEdit = (index, row) => {
       localStorage.setItem('editActivityId', row.id)
       router.push("/productEdit");
@@ -329,6 +333,7 @@ export default {
       handleAdd,
       handlePageChange,
       handleDelete,
+      handleCopy,
       handleEdit,
       handleQrcode,
       saveEdit,
