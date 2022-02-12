@@ -148,7 +148,8 @@
 </template>
 
 <script>
-import { reactive, ref, onMounted, onBeforeUnmount } from "vue";
+import { reactive, ref, onMounted, onBeforeUnmount, watch } from "vue";
+import { onBeforeRouteUpdate } from "vue-router";
 import { ElMessage } from "element-plus";
 import WangEditor from "wangEditor";
 import { activityCreate, activityDetail, activityUpdate } from "../api/index";
@@ -181,10 +182,15 @@ export default {
       link: [],
     });
     let instance;
+
     onMounted(() => {
       console.log("获取到的参数：", Route.query.activityId);
 
       instance = new WangEditor(editor.value);
+      instance.config.uploadVideoServer = '/common/video/upload';
+      instance.config.uploadVideoMaxSize = 100 * 1024 * 1024;
+      instance.config.uploadVideoAccept = ['mp4'],
+      instance.config.uploadVideoName = 'file',
       instance.config.zIndex = 1;
       instance.create();
       if (Route.query.activityId != undefined) {
@@ -205,6 +211,35 @@ export default {
         });
       }
     });
+
+    watch(
+      () => Route.path,
+      () => {
+        console.log("监听到变化");
+        console.log("获取到的参数：", Route.query.activityId);
+        //instance = new WangEditor(editor.value);
+        //instance.config.zIndex = 1;
+        //instance.create();
+        if (Route.query.activityId != undefined) {
+          //编辑
+          update = true;
+          activityDetail({
+            id: Route.query.activityId,
+          }).then((resp) => {
+            form.title = resp.data.title;
+            form.address = resp.data.address;
+            form.beginDate = resp.data.startTime + "";
+            form.endDate = resp.data.endTime + "";
+            form.amount = resp.data.amount / 100;
+            form.cover = resp.data.cover;
+            form.link = resp.data.link.split(",");
+            form.amountDescribe = resp.data.amountDescribe;
+            instance.txt.html(resp.data.describe);
+          });
+        }
+      }
+    );
+
     onBeforeUnmount(() => {
       instance.destroy();
       instance = null;
