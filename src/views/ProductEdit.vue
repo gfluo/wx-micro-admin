@@ -196,6 +196,10 @@ export default {
       localStorage.removeItem("editActivityId");
 
       instance = new WangEditor(editor.value);
+      instance.config.uploadVideoServer = '/common/video/upload';
+      instance.config.uploadVideoMaxSize = 40 * 1024 * 1024;
+      instance.config.uploadVideoAccept = ['mp4'],
+      instance.config.uploadVideoName = 'file',
       instance.config.zIndex = 1;
       instance.create();
       if (editActivityId) {
