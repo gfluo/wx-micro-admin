@@ -215,7 +215,7 @@ export default {
             form.endDate = resp.data.endTime + "";
             form.amount = resp.data.amount / 100;
             form.cover = resp.data.cover;
-            form.link = resp.data.link.split(",");
+            form.link = resp.data.link ? resp.data.link.split(",") : [];
             form.amountDescribe = resp.data.amountDescribe;
             instance.txt.html(resp.data.describe);
           }
