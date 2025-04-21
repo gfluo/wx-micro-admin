@@ -25,7 +25,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="费用(元)" prop="amount">
-            <el-input-number size="mini" v-model="form.amount" :min="1" />
+            <el-input-number size="mini" v-model="form.amount" :min="0" />
           </el-form-item>
           <el-form-item label="费用描述" prop="amountDescribe">
             <el-input size="mini" v-model="form.amountDescribe"></el-input>
