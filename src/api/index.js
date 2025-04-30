@@ -32,6 +32,14 @@ export const getOrders = query => {
     })
 }
 
+export const getAdvises = query => {
+    return request({
+        url: '/admin/advises',
+        method: "get",
+        params: query
+    })
+}
+
 export const getActivities = query => {
     return request({
         url: '/admin/activities',

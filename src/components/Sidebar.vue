@@ -60,6 +60,11 @@ export default {
                 index: "/products",
                 title: "活动列表",
             },
+            {
+                icon: "el-icon-lx-warn",
+                index: "/advises",
+                title: "投诉建议",
+            },
             /*
             {
                 icon: "el-icon-lx-cascades",

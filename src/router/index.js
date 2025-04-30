@@ -32,6 +32,13 @@ const routes = [
                 },
                 component: () => import( /* webpackChunkName: "table" */ "../views/OrderTable.vue")
             }, {
+                path: "/advises",
+                name: "adviseTbale",
+                meta: {
+                    title: '投诉建议'
+                },
+                component: () => import( /* webpackChunkName: "table" */ "../views/AdviseTable.vue")
+            }, {
                 path: "/products",
                 name: "producttable",
                 meta: {
