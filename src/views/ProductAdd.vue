@@ -151,7 +151,7 @@
 import { reactive, ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 import { ElMessage } from "element-plus";
-import WangEditor from "wangeditor";
+import WangEditor from "wangEditor";
 import { activityCreate, activityDetail, activityUpdate } from "../api/index";
 import { useRoute } from "vue-router";
 export default {
