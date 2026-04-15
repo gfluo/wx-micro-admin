@@ -34,6 +34,15 @@
         <p class="login-tips">Tips : 用户名和密码随便填。</p>
       </el-form>
     </div>
+
+    <!-- ========== 备案号 开始 ========== -->
+    <div class="beian-info">
+      <a href="https://beian.miit.gov.cn/" target="_blank">
+        苏ICP备2021042099号-1
+      </a>
+    </div>
+    <!-- ========== 备案号 结束 ========== -->
+
   </div>
 </template>
 
@@ -140,5 +149,23 @@ export default {
   font-size: 12px;
   line-height: 30px;
   color: #fff;
+}
+
+/* ========== 备案号样式 ========== */
+.beian-info {
+  position: fixed;
+  left: 0;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
+}
+.beian-info a {
+  color: #fff;
+  text-decoration: none;
+}
+.beian-info a:hover {
+  text-decoration: underline;
 }
 </style>
